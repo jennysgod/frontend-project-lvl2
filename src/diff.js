@@ -1,29 +1,35 @@
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
+import parserSelector from './parsers.js';
 
 export default function getDiff(path1, path2) {
-  const fileData = (filepath) => JSON.parse(fs.readFileSync(path.resolve(filepath), 'utf-8'));
-  const obj1 = fileData(path1);
-  const obj2 = fileData(path2);
-  const allKeys = _.union(Object.keys(obj1), Object.keys(obj2));
+  const getExt = (filepath) => path.extname(filepath).slice(1);
+  const getData = (filepath) => fs.readFileSync(path.resolve(filepath), 'utf-8');
+
+  const ext1 = getExt(path1);
+  const ext2 = getExt(path2);
+  const data1 = getData(path1);
+  const data2 = getData(path2);
+
+  const parsedData1 = parserSelector(data1, ext1);
+  const parsedData2 = parserSelector(data2, ext2);
+  const allKeys = _.union(Object.keys(parsedData1), Object.keys(parsedData2)).sort();
 
   const arr = allKeys.map((key) => {
-    if (!_.has(obj1, key) && _.has(obj2, key)) {
-      return `  + ${key}: ${obj2[key]}`;
+    if (!_.has(parsedData1, key) && _.has(parsedData2, key)) {
+      return `+ ${key}: ${parsedData2[key]}`;
     }
 
-    if (_.has(obj1, key) && !_.has(obj2, key)) {
-      return `  - ${key}: ${obj1[key]}`;
+    if (_.has(parsedData1, key) && !_.has(parsedData2, key)) {
+      return `- ${key}: ${parsedData1[key]}`;
     }
 
-    if (!_.isEqual(obj1[key], obj2[key])) {
-      return `  - ${key}: ${obj1[key]} \n  + ${key}: ${obj2[key]}`;
+    if (!_.isEqual(parsedData1[key], parsedData2[key])) {
+      return `- ${key}: ${parsedData1[key]}\n  + ${key}: ${parsedData2[key]}`;
     }
 
-    return `    ${key}: ${obj1[key]}`;
-  });
-  let res = _.join(arr, '\n');
-  res = `{\n${res} \n}`;
-  return res;
+    return `  ${key}: ${parsedData1[key]}`;
+  }).join('\n  ');
+  return `{\n  ${arr}\n}`;
 }
