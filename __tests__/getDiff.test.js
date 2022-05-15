@@ -1,9 +1,12 @@
-import getDiff from '../src/getDiff.js';
+import { getDiff, getData, getExt } from '../src/getDiff.js';
 
 const filepath1 = './__fixtures__/file1.json';
 const filepath2 = './__fixtures__/file2.json';
 
-const result = `{
+const fileExt = getExt(filepath1);
+const fileData = getData(filepath1);
+
+const diffResult = `{
     common: {
       + follow: false
         setting1: Value 1
@@ -48,6 +51,14 @@ const result = `{
     }
 }`;
 
-test('getDiffTest', () => {
-  expect(getDiff(filepath1, filepath2)).toEqual(result);
+test('getExt test', () => {
+  expect(getExt(filepath1)).toEqual(fileExt);
+});
+
+test('getData test', () => {
+  expect(getData(filepath1)).toEqual(fileData);
+});
+
+test('getDiff test', () => {
+  expect(getDiff(filepath1, filepath2)).toEqual(diffResult);
 });

@@ -1,32 +1,40 @@
 import _ from 'lodash';
 
-const space = '  ';
-const hasChildren = (obj, depth) => {
+const tab = '  ';
+
+const printValue = (obj, depth) => {
   if (!_.isObject(obj)) {
     return obj;
   }
-  const currentDepth = depth + 1;
-  const res = Object.keys(obj).map((key) => `${key}: ${hasChildren(obj[key], currentDepth + 1)}`).join(`\n${space.repeat(currentDepth + 1)}`);
-  return `{\n${space.repeat(currentDepth + 1)}${res}\n${space.repeat(depth)}}`;
+  const currentDepth = depth + 2;
+  const allObjKeys = Object.keys(obj);
+  const res = allObjKeys
+    .map((key) => `${key}: ${printValue(obj[key], currentDepth)}`)
+    .join(`\n${tab.repeat(currentDepth)}`);
+
+  return `{\n${tab.repeat(currentDepth)}${res}\n${tab.repeat(depth)}}`;
 };
 
 const stylish = (diffTree) => {
-  const iter = (tree, depth = 1) => tree.map((node) => {
-    switch (node.type) {
-      case 'added':
-        return `${space.repeat(depth)}+ ${node.key}: ${hasChildren(node.value, depth + 1)}`;
-      case 'deleted':
-        return `${space.repeat(depth)}- ${node.key}: ${hasChildren(node.value, depth + 1)}`;
-      case 'unchanged':
-        return `${space.repeat(depth)}  ${node.key}: ${hasChildren(node.value, depth + 1)}`;
-      case 'changed':
-        return `${space.repeat(depth)}- ${node.key}: ${hasChildren(node.value, depth + 1)}\n${space.repeat(depth)}+ ${node.key}: ${hasChildren(node.value2, depth + 1)}`;
-      case 'nested':
-        return `${space.repeat(depth + 1)}${node.key}: {\n${iter(node.children, depth + 2)}\n${space.repeat(depth + 1)}}`;
-      default:
-        throw new Error('Error');
-    }
-  }).join('\n');
-  return `{\n${iter(diffTree)}\n}`;
+  const makeStylish = (tree, depth = 1) => tree
+    .map((node) => {
+      switch (node.type) {
+        case 'added':
+          return `${tab.repeat(depth)}+ ${node.key}: ${printValue(node.value, depth + 1)}`;
+        case 'deleted':
+          return `${tab.repeat(depth)}- ${node.key}: ${printValue(node.value, depth + 1)}`;
+        case 'unchanged':
+          return `${tab.repeat(depth)}  ${node.key}: ${printValue(node.value, depth + 1)}`;
+        case 'changed':
+          return `${tab.repeat(depth)}- ${node.key}: ${printValue(node.value, depth + 1)}\n${tab.repeat(depth)}+ ${node.key}: ${printValue(node.value2, depth + 1)}`;
+        case 'nested':
+          return `${tab.repeat(depth + 1)}${node.key}: {\n${makeStylish(node.children, depth + 2)}\n${tab.repeat(depth + 1)}}`;
+        default:
+          throw new Error('Unknown node type');
+      }
+    })
+    .join('\n');
+
+  return `{\n${makeStylish(diffTree)}\n}`;
 };
 export default stylish;
