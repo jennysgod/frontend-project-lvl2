@@ -17,7 +17,7 @@ export default function getDiff(path1, path2, selectedFormat = 'stylish') {
   const parsedData2 = parserSelector(data2, ext2); // объект
 
   const tree = buildDiffTree(parsedData1, parsedData2);
-  return format(tree, selectedFormat);
-}
+  const result = format(tree, selectedFormat);
 
-export { getExt, getData };
+  return result;
+}
