@@ -7,7 +7,7 @@ import format from './formatters/index.js';
 const getExt = (filepath) => path.extname(filepath).slice(1);
 const getData = (filepath) => fs.readFileSync(path.resolve(filepath), 'utf-8');
 
-function getDiff(path1, path2, selectedFormat = 'stylish') {
+export default function getDiff(path1, path2, selectedFormat = 'stylish') {
   const ext1 = getExt(path1);
   const ext2 = getExt(path2);
   const data1 = getData(path1);
@@ -20,4 +20,4 @@ function getDiff(path1, path2, selectedFormat = 'stylish') {
   return format(tree, selectedFormat);
 }
 
-export { getDiff, getExt, getData };
+export { getExt, getData };
