@@ -4,8 +4,6 @@ export default function parserSelector(fileData, fileExt) {
   switch (fileExt) {
     case 'json':
       return JSON.parse(fileData);
-    case 'yaml':
-      return yaml.load(fileData);
     case 'yml':
       return yaml.load(fileData);
     default:
