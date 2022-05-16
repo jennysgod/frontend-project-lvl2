@@ -9,16 +9,30 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [14.x]
+
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
         with:
           node-version: '14.x'
-      - run: make install
-      - run: make test
-      - run: make lint
+
+      - name: npm install, build
+        run: |
+          make install
+
+      - name: Run linter
+        run: |
+          make lint
+
       - name: code coverage
-        uses: paambaati/codeclimate-action@v2.5.7
+        uses: paambaati/codeclimate-action@v2.6.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
