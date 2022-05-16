@@ -24,12 +24,15 @@
 
 #### Сравнение файлов .json и .yml в формате stylish:
 `gendiff ./__fixtures__/file1.json ./__fixtures__/file2.yml`
+
 <a href="https://asciinema.org/a/494606" target="_blank"><img src="https://asciinema.org/a/494606.svg" /></a>
 
 #### Сравнение файлов .json и .yml в формате plain:
 `gendiff -f plain ./__fixtures__/file1.json ./__fixtures__/file2.yml`
+
 <a href="https://asciinema.org/a/494607" target="_blank"><img src="https://asciinema.org/a/494607.svg" /></a>
 
 #### Сравнение файлов .json и .yml в формате JSON:
 `gendiff -f json ./__fixtures__/file1.json ./__fixtures__/file2.yml`
+
 <a href="https://asciinema.org/a/494608" target="_blank"><img src="https://asciinema.org/a/494608.svg" /></a>
