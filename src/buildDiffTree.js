@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 export default function buildDiffTree(file1, file2) {
-  const allKeys = _.union(Object.keys(file1), Object.keys(file2)).sort();
+  const allKeys = _.sortBy(_.union(Object.keys(file1), Object.keys(file2)));
   const tree = allKeys.map((key) => {
     if (_.isEqual(file1[key], file2[key])) {
       return { type: 'unchanged', key, value: file1[key] };
