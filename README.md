@@ -16,8 +16,6 @@
 
 `$ make install`
 
-`$ make publish`
-
 `$ sudo npm link`
 
 <a href="https://asciinema.org/a/494620" target="_blank"><img src="https://asciinema.org/a/494620.svg" /></a>

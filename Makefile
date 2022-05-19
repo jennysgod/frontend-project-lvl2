@@ -12,3 +12,5 @@ test:
 
 test-coverage:
 	npx jest --coverage
+
+.PHONY: test

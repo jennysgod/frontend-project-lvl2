@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "type": "module",
-  "description": "[![Actions Status](https://github.com/jennysgod/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/jennysgod/frontend-project-lvl2/actions)",
+  "description": "Tool that finds the difference between two files (JSON or YAML).",
   "main": "src/getDiff.js",
   "bin": {
     "gendiff": "bin/gendiff.js"
@@ -14,14 +14,13 @@
     "type": "git",
     "url": "git+https://github.com/jennysgod/frontend-project-lvl2.git"
   },
-  "author": "",
+  "author": "Mikhail Popov",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jennysgod/frontend-project-lvl2/issues"
   },
   "homepage": "https://github.com/jennysgod/frontend-project-lvl2#readme",
   "dependencies": {
-    "@jest/globals": "^27.5.1",
     "commander": "^9.1.0",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21"
