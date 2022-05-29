@@ -15,7 +15,7 @@ const printValue = (obj, depth) => {
   return `{\n${tab.repeat(currentDepth)}${res}\n${tab.repeat(depth)}}`;
 };
 
-const stylish = (diffTree) => {
+export default function stylish(innerTree) {
   const makeStylish = (tree, depth = 1) => tree
     .map((node) => {
       switch (node.type) {
@@ -35,6 +35,5 @@ const stylish = (diffTree) => {
     })
     .join('\n');
 
-  return `{\n${makeStylish(diffTree)}\n}`;
-};
-export default stylish;
+  return `{\n${makeStylish(innerTree)}\n}`;
+}
