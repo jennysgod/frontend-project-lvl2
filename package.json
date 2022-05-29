@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Tool that finds the difference between two files (JSON or YAML).",
-  "main": "src/getDiff.js",
+  "main": "src/index.js",
   "bin": {
-    "gendiff": "bin/index.js"
+    "gendiff": "bin/gendiff.js"
   },
   "scripts": {
     "test": "jest"
