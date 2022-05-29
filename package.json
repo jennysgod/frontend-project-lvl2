@@ -5,7 +5,7 @@
   "description": "Tool that finds the difference between two files (JSON or YAML).",
   "main": "src/getDiff.js",
   "bin": {
-    "gendiff": "bin/gendiff.js"
+    "gendiff": "bin/index.js"
   },
   "scripts": {
     "test": "jest"
