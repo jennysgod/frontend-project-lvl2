@@ -1,34 +1,34 @@
 import _ from 'lodash';
 
-const printValue = (obj) => {
-  if (_.isObject(obj)) {
+const stringify = (value) => {
+  if (_.isObject(value)) {
     return '[complex value]';
   }
-  if (_.isString(obj)) {
-    return `'${obj}'`;
+  if (_.isString(value)) {
+    return `'${value}'`;
   }
-  return obj;
+  return String(value);
 };
 
-export default function plain(innerTree) {
-  const makePlain = (tree, nodeName = '') => tree
+export default function makePlain(innerTree) {
+  const format = (tree, nodeName = '') => tree
     .map((node) => {
       switch (node.type) {
         case 'added':
-          return `Property '${nodeName}${node.key}' was added with value: ${printValue(node.value)}`;
+          return `Property '${nodeName}${node.key}' was added with value: ${stringify(node.value)}`;
         case 'deleted':
           return `Property '${nodeName}${node.key}' was removed`;
         case 'unchanged':
           return '';
         case 'changed':
-          return `Property '${nodeName}${node.key}' was updated. From ${printValue(node.value)} to ${printValue(node.value2)}`;
+          return `Property '${nodeName}${node.key}' was updated. From ${stringify(node.value)} to ${stringify(node.value2)}`;
         case 'nested':
-          return `${makePlain(node.children, nodeName.concat(node.key, '.'))}`;
+          return `${format(node.children, nodeName.concat(node.key, '.'))}`;
         default:
           throw new Error('Unknown node type');
       }
     })
     .filter((node) => !!node)
     .join('\n');
-  return makePlain(innerTree);
+  return format(innerTree);
 }

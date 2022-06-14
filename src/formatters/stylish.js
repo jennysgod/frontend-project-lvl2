@@ -1,39 +1,39 @@
 import _ from 'lodash';
 
-const tab = '  ';
+const makeIndent = (depth) => '  '.repeat(depth);
 
-const printValue = (obj, depth) => {
-  if (!_.isObject(obj)) {
-    return obj;
+const stringify = (value, depth) => {
+  if (!_.isObject(value)) {
+    return String(value);
   }
   const currentDepth = depth + 2;
-  const allObjKeys = Object.keys(obj);
+  const allObjKeys = Object.keys(value);
   const res = allObjKeys
-    .map((key) => `${key}: ${printValue(obj[key], currentDepth)}`)
-    .join(`\n${tab.repeat(currentDepth)}`);
+    .map((key) => `${key}: ${stringify(value[key], currentDepth)}`)
+    .join(`\n${makeIndent(currentDepth)}`);
 
-  return `{\n${tab.repeat(currentDepth)}${res}\n${tab.repeat(depth)}}`;
+  return `{\n${makeIndent(currentDepth)}${res}\n${makeIndent(depth)}}`;
 };
 
-export default function stylish(innerTree) {
-  const makeStylish = (tree, depth = 1) => tree
+export default function makeStylish(innerTree) {
+  const format = (tree, depth = 1) => tree
     .map((node) => {
       switch (node.type) {
         case 'added':
-          return `${tab.repeat(depth)}+ ${node.key}: ${printValue(node.value, depth + 1)}`;
+          return `${makeIndent(depth)}+ ${node.key}: ${stringify(node.value, depth + 1)}`;
         case 'deleted':
-          return `${tab.repeat(depth)}- ${node.key}: ${printValue(node.value, depth + 1)}`;
+          return `${makeIndent(depth)}- ${node.key}: ${stringify(node.value, depth + 1)}`;
         case 'unchanged':
-          return `${tab.repeat(depth)}  ${node.key}: ${printValue(node.value, depth + 1)}`;
+          return `${makeIndent(depth)}  ${node.key}: ${stringify(node.value, depth + 1)}`;
         case 'changed':
-          return `${tab.repeat(depth)}- ${node.key}: ${printValue(node.value, depth + 1)}\n${tab.repeat(depth)}+ ${node.key}: ${printValue(node.value2, depth + 1)}`;
+          return `${makeIndent(depth)}- ${node.key}: ${stringify(node.value, depth + 1)}\n${makeIndent(depth)}+ ${node.key}: ${stringify(node.value2, depth + 1)}`;
         case 'nested':
-          return `${tab.repeat(depth + 1)}${node.key}: {\n${makeStylish(node.children, depth + 2)}\n${tab.repeat(depth + 1)}}`;
+          return `${makeIndent(depth + 1)}${node.key}: {\n${format(node.children, depth + 2)}\n${makeIndent(depth + 1)}}`;
         default:
           throw new Error('Unknown node type');
       }
     })
     .join('\n');
 
-  return `{\n${makeStylish(innerTree)}\n}`;
+  return `{\n${format(innerTree)}\n}`;
 }
