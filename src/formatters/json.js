@@ -1,3 +1,3 @@
-export default function makeJson(diffTree) {
+export default function formatJson(diffTree) {
   return JSON.stringify(diffTree);
 }

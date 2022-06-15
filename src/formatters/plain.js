@@ -10,25 +10,26 @@ const stringify = (value) => {
   return String(value);
 };
 
-export default function makePlain(innerTree) {
+export default function formatPlain(innerTree) {
   const format = (tree, nodeName = '') => tree
     .map((node) => {
+      const propertyName = nodeName ? `${nodeName}.${node.key}` : node.key;
       switch (node.type) {
         case 'added':
-          return `Property '${nodeName}${node.key}' was added with value: ${stringify(node.value)}`;
+          return `Property '${propertyName}' was added with value: ${stringify(node.value)}`;
         case 'deleted':
-          return `Property '${nodeName}${node.key}' was removed`;
+          return `Property '${propertyName}' was removed`;
         case 'unchanged':
           return '';
         case 'changed':
-          return `Property '${nodeName}${node.key}' was updated. From ${stringify(node.value)} to ${stringify(node.value2)}`;
+          return `Property '${propertyName}' was updated. From ${stringify(node.value)} to ${stringify(node.value2)}`;
         case 'nested':
-          return `${format(node.children, nodeName.concat(node.key, '.'))}`;
+          return `${format(node.children, propertyName)}`;
         default:
           throw new Error('Unknown node type');
       }
     })
-    .filter((node) => !!node)
+    .filter(Boolean)
     .join('\n');
   return format(innerTree);
 }

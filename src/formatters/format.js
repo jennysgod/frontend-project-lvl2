@@ -1,15 +1,15 @@
-import makeStylish from './stylish.js';
-import makePlain from './plain.js';
-import makeJson from './json.js';
+import formatStylish from './stylish.js';
+import formatPlain from './plain.js';
+import formatJson from './json.js';
 
 export default function format(diffTree, formatName) {
   switch (formatName) {
     case 'stylish':
-      return makeStylish(diffTree);
+      return formatStylish(diffTree);
     case 'plain':
-      return makePlain(diffTree);
+      return formatPlain(diffTree);
     case 'json':
-      return makeJson(diffTree);
+      return formatJson(diffTree);
     default:
       throw new Error('Unknown format');
   }
